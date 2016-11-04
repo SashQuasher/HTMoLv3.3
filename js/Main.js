@@ -207,7 +207,7 @@ function Main()
        if(molecule!=null)
        {
            data.innerHTML="Loading...";
-
+           window.setTimeout(function(){
            if(main.ObjP.Model.Frames!=0 && main.ObjP.Model.Frames!="")
            {
            main.filerequest();
@@ -218,6 +218,7 @@ function Main()
            DinamicaActiva=true;
             }
            data.innerHTML="";
+       },100);
        }
        else{
         data.innerHTML='Error: Invalid URL or Connection not available';

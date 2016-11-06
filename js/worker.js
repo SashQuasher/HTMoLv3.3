@@ -611,6 +611,16 @@
               return a;
           }
 
+          function endianness () {
+            var b = new ArrayBuffer(4);
+            var a = new Uint32Array(b);
+            var c = new Uint8Array(b);
+            a[0] = 0xdeadbeef;
+            if (c[0] == 0xef) return 'LE';
+            if (c[0] == 0xde) return 'BE';
+            throw new Error('unknown endianness');
+          }
+
           function swap32(val,endian) { //Esta funcion voltea la endianess segun la bandera endian
             if(endian)
             {
@@ -622,17 +632,25 @@
             else //si no hay necesidad de voltearlo lo regresa igual
               return val;
             }
-            function swaparray(array,endian) //Para hacer swap a un arreglo
+            function swaparray(buf,endian) //Para hacer swap a un arreglo
             {
               if(endian)
               {
-                for (var i = 0;i<array.length; i++) {
-                 array[i]=swap32(array[i],endian);
+                var endi=false;
+                if(endianness()=='BE')
+                {
+                  endi=true;
                 }
+                var n=new Float32Array(n_atoms+2); 
+                for(var i=0,index=0;i<n.length;i++,index+=4)
+                {
+                  n[i]=new DataView(buf).getFloat32(index,endi);
+                }
+                return n;
               }
               else
               {
-                return array;
+                return new Float32Array(buf);
               }
             }
 
@@ -645,7 +663,7 @@
               } else if (doc[0] == 84 && doc[1] == 1146244931) { //Valor de la palabra CORD en Numero
                   console.log("32 bit Recscale" );
                   rec_scale64 = false; //Se desactiva la bandera son enteros comunes 32bits(4 bytes)
-              } else if(swap32(doc[0],true)==84 && swap32(doc[1],true)==1146244931){
+              } else if(swap32(doc[0],true)==84 && doc[1]==1146244931){
                   endianess=true;
                   console.log("Need To Change Endianess");
               }else if(doc[0]==null){
@@ -706,15 +724,18 @@
                         for(var i=0;i<n_csets;i++)
                         {
                           var arr = new Float32Array(buff.subarray(pos, pos+n_floats));
+                          arr=swaparray(arr.buffer,endianess);
                           pos+=n_floats;
                           var arr1 = new Float32Array(buff.subarray(pos, pos+n_floats));
+                          arr1=swaparray(arr1.buffer,endianess);
                           pos+=n_floats;
                           var arr2 = new Float32Array(buff.subarray(pos, pos+n_floats));
+                          arr2=swaparray(arr2.buffer,endianess);
                           self.postMessage({
                               cmd: "enviar",
-                              dato: swaparray(arr.subarray(1,-1),endianess),
-                              dato1: swaparray(arr1.subarray(1,-1),endianess),
-                              dato2: swaparray(arr2.subarray(1,-1),endianess),
+                              dato: arr.subarray(1,-1),
+                              dato1: arr1.subarray(1,-1),
+                              dato2: arr2.subarray(1,-1),
                               bndarray: bnd
                           });
                           pos+=n_floats+paso;

@@ -67,7 +67,7 @@ function SetView(mol, name){
 
 function ByAmino(mol, name) {
     return function(event) {
-        AtomosSeleccionados = [];
+        EliminarSeleccion();
         for (var i = 0; i < molecule.LstChain.length; i++) {
             for (var j = 0; j < molecule.LstChain[i].LstAminoAcid.length; j++) {
                 if (molecule.LstChain[i].LstAminoAcid[j].Name == name) {
@@ -85,7 +85,7 @@ function ByAmino(mol, name) {
 
 function ByAtoms(mol, element) {
     return function(event) {
-        AtomosSeleccionados = [];
+        EliminarSeleccion();
         for (var i = 0; i < molecule.LstAtoms.length; i++) {
             //alert(molecule.LstAtoms[i].Element);
             if (element == molecule.LstAtoms[i].Element) {
@@ -276,7 +276,7 @@ function DeleteMeasures()
 
 function ProcesarSeleccion() //poner a color seleccionado, pregunta: va a estar habilitado para bonds?
 {
-    console.time("procesarSeleccion");
+    //console.time("procesarSeleccion");
     var ArrCont=[];
     for (var t = 0; t < AtomosSeleccionados.length; t++)
     {
@@ -328,7 +328,7 @@ function ProcesarSeleccion() //poner a color seleccionado, pregunta: va a estar 
         }
 
 
-    console.timeEnd("procesarSeleccion");
+    //console.timeEnd("procesarSeleccion");
 
 }
 

@@ -185,54 +185,7 @@ function handleMouseDown(event)
                                 //----------------------------------- poner todos en color normal ------------------------------------
                                 if (atom.Seleccionado == true) 
                                 {
-                                    var ArrCont=[];
-                                    /////////////////////////////////////////////////
-                                    for(var i=0; i < AtomosSeleccionados.length; i++ )
-                                    {
-                                        var atomTemp=AtomosSeleccionados[i];
-
-                                        if (atomTemp.State=='Active') 
-                                        {
-                                            var mul=( atomTemp.PositionBSolid - 1 ) * nColor;
-                                            for (var z = 0; z < nColor;) 
-                                            {
-                                                    ColorTotal[atomTemp.BloqueSolid-1][mul + z]   = atomTemp.ColorRGB[0];
-                                                    ColorTotal[atomTemp.BloqueSolid-1][mul + z + 1]=atomTemp.ColorRGB[1];
-                                                    ColorTotal[atomTemp.BloqueSolid-1][mul + z + 2]=atomTemp.ColorRGB[2];
-                                                    ColorTotal[atomTemp.BloqueSolid-1][mul + z + 3]=atomTemp.ColorRGB[3];
-                                                    z = z + 4;
-                                            }
-                                            atomTemp.Seleccionado=false;
-
-                                            var agregar=true;
-                                            for(var j=0; j < ArrCont.length; j++)
-                                            {
-                                                if ((atomTemp.BloqueSolid-1)==ArrCont[j]) 
-                                                {
-                                                    agregar=false;
-                                                    break;
-                                                }
-                                            }
-                                            if (agregar==true) 
-                                            {
-                                                ArrCont.push(atomTemp.BloqueSolid-1);
-                                            }
-                                        }
-                                        
-                                    }
-
-                                    for(var i=0; i < ArrCont.length; i++)
-                                    {
-                                        gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexColorBuffer[ArrCont[i]]);
-                                        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(ColorTotal[ArrCont[i]]), gl.DYNAMIC_DRAW);
-                                        sphereVertexColorBuffer[ArrCont[i]].itemSize = 4;
-                                        sphereVertexColorBuffer[ArrCont[i]].numItems = ColorTotal[ArrCont[i]].length / 4;
-                                        gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-                                    }
-
-                                    AtomosSeleccionados = [];
-                                    /////////////////////////////////////////////////                                   
+                                    EliminarSeleccion();                           
 
                                 }
 
@@ -240,53 +193,7 @@ function handleMouseDown(event)
                                 //------ poner todos en solid menos este
                                 else 
                                 {
-                                    var ArrCont=[];
-                                    for(var i=0; i < AtomosSeleccionados.length; i++ )
-                                    {
-                                        var atomTemp=AtomosSeleccionados[i];
-
-                                        if (atomTemp.State=='Active') 
-                                        {
-                                            var mul=( atomTemp.PositionBSolid - 1 ) * nColor;
-                                            for (var z = 0; z < nColor;) 
-                                            {
-                                                    ColorTotal[atomTemp.BloqueSolid-1][mul + z]   = atomTemp.ColorRGB[0];
-                                                    ColorTotal[atomTemp.BloqueSolid-1][mul + z + 1]=atomTemp.ColorRGB[1];
-                                                    ColorTotal[atomTemp.BloqueSolid-1][mul + z + 2]=atomTemp.ColorRGB[2];
-                                                    ColorTotal[atomTemp.BloqueSolid-1][mul + z + 3]=atomTemp.ColorRGB[3];
-                                                    z = z + 4;
-                                            }
-                                            atomTemp.Seleccionado=false;
-
-                                            var agregar=true;
-                                            for(var j=0; j < ArrCont.length; j++)
-                                            {
-                                                if ((atomTemp.BloqueSolid-1)==ArrCont[j]) 
-                                                {
-                                                    agregar=false;
-                                                    break;
-                                                }
-                                            }
-                                            if (agregar==true) 
-                                            {
-                                                ArrCont.push(atomTemp.BloqueSolid-1);
-                                            }   
-                                        }
-                                        
-
-                                    }
-
-                                    for(var i=0; i < ArrCont.length; i++)
-                                    {
-                                        gl.bindBuffer(gl.ARRAY_BUFFER, sphereVertexColorBuffer[ArrCont[i]]);
-                                        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(ColorTotal[ArrCont[i]]), gl.DYNAMIC_DRAW);
-                                        sphereVertexColorBuffer[ArrCont[i]].itemSize = 4;
-                                        sphereVertexColorBuffer[ArrCont[i]].numItems = ColorTotal[ArrCont[i]].length / 4;
-                                        gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
-                                    }
-
-                                    AtomosSeleccionados = [];
+                                    EliminarSeleccion();
 
                                     var mul=(atom.PositionBSolid-1) * nColor;
                                     for (var z = 0; z < nColor;) 

@@ -710,11 +710,15 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
 
             }
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, lineVertexPositionBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesLineas), gl.DYNAMIC_DRAW);
-            lineVertexPositionBuffer.itemSize = 3;
-            lineVertexPositionBuffer.numItems = verticesLineas.length/3;
-            gl.bindBuffer(gl.ARRAY_BUFFER, null);
+            if (molecule.LstBonds.length>0) 
+            {
+                gl.bindBuffer(gl.ARRAY_BUFFER, lineVertexPositionBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verticesLineas), gl.DYNAMIC_DRAW);
+                lineVertexPositionBuffer.itemSize = 3;
+                lineVertexPositionBuffer.numItems = verticesLineas.length/3;
+                gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+            }
 
             //----------------------------------------  PARTE DE LOS ENLACES SKELETON------------------------------------------------
             //alert(verticesLineas);
@@ -762,13 +766,17 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
 
             }
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, lineSkeleVerPosBuf);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verLineSkele), gl.DYNAMIC_DRAW);
-            lineSkeleVerPosBuf.itemSize = 3;
-            lineSkeleVerPosBuf.numItems = verLineSkele.length/3;
-            gl.bindBuffer(gl.ARRAY_BUFFER, null);
+            if (molecule.LstBondsSkeleton.length>0) 
+            {
+                gl.bindBuffer(gl.ARRAY_BUFFER, lineSkeleVerPosBuf);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verLineSkele), gl.DYNAMIC_DRAW);
+                lineSkeleVerPosBuf.itemSize = 3;
+                lineSkeleVerPosBuf.numItems = verLineSkele.length/3;
+                gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-            if(OptRep==true)//---------Julio
+            }
+
+            if(OptRep==true)//---------Julio  falta validar
             {
               cleanMemory();
               initBufferSpline();
@@ -835,30 +843,35 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
 
             //////PARTE DE LOS ENLACES
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, colorVertexBuffer);
-            gl.vertexAttribPointer(currentProgram.textureCoordAttribute, colorVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
-            gl.bindBuffer(gl.ARRAY_BUFFER, null);
+            if (molecule.LstBonds.length>0) 
+            {
+                gl.bindBuffer(gl.ARRAY_BUFFER, colorVertexBuffer);
+                gl.vertexAttribPointer(currentProgram.textureCoordAttribute, colorVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
+                gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, ColorDifBuffer);
-            gl.vertexAttribPointer(currentProgram.ColorDif, ColorDifBuffer.itemSize, gl.FLOAT, false, 0, 0);
-            gl.bindBuffer(gl.ARRAY_BUFFER, null);
+                gl.bindBuffer(gl.ARRAY_BUFFER, ColorDifBuffer);
+                gl.vertexAttribPointer(currentProgram.ColorDif, ColorDifBuffer.itemSize, gl.FLOAT, false, 0, 0);
+                gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, lineNormalBuffer);
-            gl.vertexAttribPointer(currentProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
-            gl.bindBuffer(gl.ARRAY_BUFFER, null);
+                gl.bindBuffer(gl.ARRAY_BUFFER, lineNormalBuffer);
+                gl.vertexAttribPointer(currentProgram.vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+                gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, ChainBufferBnd);
-            gl.vertexAttribPointer(currentProgram.Opcion, ChainBufferBnd.itemSize, gl.FLOAT, false, 0, 0);
-            gl.bindBuffer(gl.ARRAY_BUFFER, null);
-            setMatrixUniforms();
+                gl.bindBuffer(gl.ARRAY_BUFFER, ChainBufferBnd);
+                gl.vertexAttribPointer(currentProgram.Opcion, ChainBufferBnd.itemSize, gl.FLOAT, false, 0, 0);
+                gl.bindBuffer(gl.ARRAY_BUFFER, null);
+                setMatrixUniforms();
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, lineVertexPositionBuffer);
-            gl.vertexAttribPointer(currentProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
-            gl.drawArrays(gl.LINES, 0, lineVertexPositionBuffer.numItems);
-            gl.bindBuffer(gl.ARRAY_BUFFER, null);
+                gl.bindBuffer(gl.ARRAY_BUFFER, lineVertexPositionBuffer);
+                gl.vertexAttribPointer(currentProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+                gl.drawArrays(gl.LINES, 0, lineVertexPositionBuffer.numItems);
+                gl.bindBuffer(gl.ARRAY_BUFFER, null);
+            }
 
             //////////////////////////////////////////////////////////////////lineas Skeletons
-                    gl.bindBuffer(gl.ARRAY_BUFFER, colSkeleVerBuf);
+            if (molecule.LstBondsSkeleton.length>0) 
+            {
+                gl.bindBuffer(gl.ARRAY_BUFFER, colSkeleVerBuf);
                     gl.vertexAttribPointer(currentProgram.textureCoordAttribute, colSkeleVerBuf.itemSize, gl.FLOAT, false, 0, 0);
                     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
@@ -880,8 +893,10 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
                     gl.drawArrays(gl.LINES, 0, lineSkeleVerPosBuf.numItems);
                     gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
+            }
+
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                if(OptRep==true)//---------Julio
+                if(OptRep==true)//---------Julio falta validar cuando no hay ca
                   DrawSpline();
                 //--------------------
 
@@ -922,6 +937,8 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
 
 
                  //////////////////////////////////////////////////////////////////lineas
+                if (molecule.LstBonds.length>0) 
+                {
                     gl.bindBuffer(gl.ARRAY_BUFFER, colorVertexBuffer);
                     gl.vertexAttribPointer(currentProgram.textureCoordAttribute, colorVertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
                     gl.bindBuffer(gl.ARRAY_BUFFER, null);
@@ -943,10 +960,12 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
                     gl.vertexAttribPointer(currentProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
                     gl.drawArrays(gl.LINES, 0, lineVertexPositionBuffer.numItems);
                     gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
+                }
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 //////////////////////////////////////////////////////////////////lineas Skeletons
+                if (molecule.LstBondsSkeleton.length>0) 
+                {
                     gl.bindBuffer(gl.ARRAY_BUFFER, colSkeleVerBuf);
                     gl.vertexAttribPointer(currentProgram.textureCoordAttribute, colSkeleVerBuf.itemSize, gl.FLOAT, false, 0, 0);
                     gl.bindBuffer(gl.ARRAY_BUFFER, null);
@@ -968,9 +987,12 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
                     gl.vertexAttribPointer(currentProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
                     gl.drawArrays(gl.LINES, 0, lineSkeleVerPosBuf.numItems);
                     gl.bindBuffer(gl.ARRAY_BUFFER, null);
+                }
 
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 ///////////////////////////// PARTE DE LOS DÍGITOS ////////////////////////////////////////////////7
+                if (diPosition.length>0) 
+                {
                     gl.bindBuffer(gl.ARRAY_BUFFER, diPosBuffer);
                     gl.vertexAttribPointer(currentProgram.vertexPositionAttribute, diPosBuffer.itemSize, gl.FLOAT, false, 0, 0);
                     gl.bindBuffer(gl.ARRAY_BUFFER, null);
@@ -996,7 +1018,9 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
                     gl.drawElements(gl.TRIANGLES, diIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
                     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
-                    if (OptRep==true)///----Julio
+                }
+
+                    if (OptRep==true)///----Julio  Validar
                       DrawSpline();
         }
 

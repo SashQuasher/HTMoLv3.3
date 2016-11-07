@@ -3,6 +3,8 @@ var contBS=0;
 
 var LstAtSelec=[];
 
+var CzPers;
+
 function Aminoacid(number,name,state)
 {
     this.Number=number;
@@ -184,6 +186,7 @@ function Process()
 	    var ChainCont=1;
 	    contBonds=0;
 	    contBS=0;
+	    CzPers=10;
 
 	    var RGB_Diffuse = [,,];  //para asignarle un único valor de color difuso a cada átomo para distinguirlo de los demás en la selección
 	    //la que no se toma sería [0][0][0]  entonces comenzaría con [1][0][0]  y terminaría en [255][255][254]
@@ -280,9 +283,27 @@ function Process()
 		        this.Model.CenterY+=atom.Y;
 		        this.Model.CenterZ+=atom.Z;
 		        cont++;	
-		        /////////////////////////se añade al array
-		        //alert(atom.NameAtom);
-			   	//AtomArray.push(atom);
+		        /////////////////////////
+		        // código para centrar bien la cámara
+		        var atmX = Math.abs(atom.X);
+		        var atmY = Math.abs(atom.Y);
+
+		        if (atmX <  atmY)
+		        {
+		        	if (CzPers < atmY) 
+		        	{
+		        		CzPers = atmY;
+		        	}
+		        	
+		        }
+		        else
+		        {
+		        	if (CzPers < atmX) 
+		        	{
+		        		CzPers = atmX;
+		        	}
+		        }
+		        
 			   	////////////////////////
 			   	id++;	
 			   	atom.id=id;
@@ -307,8 +328,6 @@ function Process()
 		    }
 		    
 	    }
-	    //alert('num atoms'+ this.Model.LstAtoms.length);
-
 	    this.Model.CenterX=this.Model.CenterX/this.Model.LstAtoms.length;
 		this.Model.CenterY=this.Model.CenterY/this.Model.LstAtoms.length;
 		this.Model.CenterZ=this.Model.CenterZ/this.Model.LstAtoms.length

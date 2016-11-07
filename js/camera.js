@@ -1,25 +1,21 @@
-function initCamera()
+function initCamera(PersZ)
 {
     Cx=molecule.CenterX;
     Cy=molecule.CenterY;
     Cz=molecule.CenterZ;
 
     z=-Cz;
+
+    var sum=Cx;
+    if (Cx<Cy) 
+    {
+        sum=Cy;
+    }
     
-    if (Cx>Cy) 
-    {
-        CameraPosition=Cx;
-    }
-    else
-    {
-        CameraPosition=Cy;
-    }
-    if (CameraPosition>Cz) 
-    {
-        CameraPosition=Cz;
-    }
+  
+    CameraPosition = PersZ * (-2);
+    CameraPosition = CameraPosition + sum;
     
     ZoomMotion=Math.ceil(CameraPosition/10);
-    CameraPosition=CameraPosition*4;
 
 }

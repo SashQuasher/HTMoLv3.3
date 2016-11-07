@@ -386,7 +386,7 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
 
         mat4.identity(mvMatrix);
 
-        mat4.translate(mvMatrix, [x, y, -CameraPosition]);
+        mat4.translate(mvMatrix, [x, y, CameraPosition]);
 
         mat4.multiply(mvMatrix, RotationMatrix);
         //mat4.multiplyVec4(mvMatrix, vec, vecResul);  //matriz por vector = vector
@@ -403,10 +403,6 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
             var x1=0;
             var y1=0;
             var z1=0;
-            console.log("empieza play");
-            console.log("coordsX:"+coordsX.length);
-            console.log("pos:"+pos);
-            console.log("frame:"+numframe);
             var apuntador=0;
             var NoAtomos = molecule.LstAtoms.length;
             var Restantes = NoAtomos - ((NoBloques-1) * NoPaso);
@@ -1772,12 +1768,11 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
           var panel = document.getElementById("Console");
           if (panel.style.opacity == 1) {
             panel.style.opacity = 0;
-            panel.style.transfor.scaleY(0);
+            //panel.style.transfor.scaleY(0);
 
-    } else if (panel.style.opacity == 0) {
+    } else  {
             panel.style.opacity = 1;
-            panel.style.transfor.scaleY(1);
-
+            //panel.style.transfor.scaleY(1);
           }
 
     }
@@ -1786,15 +1781,15 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
 </head>
 <body   onload="webGLStart();">
 <div id="Console" class="Console" style="background-color:yellow;width:0;height:0;left:50px;top:300px;position:relative;">
-            <div id="console_title"></div>
-            <div id="label1"></div>
-            <div id="outputdiv" style="width:245px;height:110px;background-color:blue;left:20px;top:20px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HTMoL output
-                <textarea id="Console_output" style="width:220px;height:80px;left:10px"></textarea>
-            </div>
-            <div id="console_inputdiv" style="width:245px;height:110px;background-color:white;left:20px;top:20px">&nbsp;&nbsp;&nbsp;Input HTMoL commands
-                <textarea id="Console_input" style="width:220px;height:80px;left:10px" onkeypress="main.onTestChange(event);"></textarea>
-            </div>
-        </div>
+    <div id="console_title"></div>
+    <div id="label1"></div>
+    <div id="console_inputdiv" style="width:245px;height:110px;background-color:white;left:20px;top:20px">&nbsp;&nbsp;&nbsp;Input HTMoL commands
+        <textarea id="Console_input" style="width:220px;height:80px;left:10px" onkeypress="main.onTestChange(event);"></textarea>
+    </div>
+    <div id="outputdiv" style="width:245px;height:110px;background-color:blue;left:20px;top:20px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HTMoL output
+        <textarea id="Console_output" style="width:220px;height:80px;left:10px"></textarea>
+    </div>
+</div>
 <div id="Contenedor">
 
     <div id="WebGL-Out"  style="height:0px;"> <!-- not change value -->

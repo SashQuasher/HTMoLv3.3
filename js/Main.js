@@ -59,7 +59,7 @@ function Main()
     //--------------------------
     molecule=this.ObjP.ReadFile(pdbInicial);
     createBonds(this);
-    initCamera();
+    initCamera(CzPers);
 
     //---------------------------
 
@@ -194,7 +194,7 @@ function Main()
         molecule=main.ObjP.ReadFile(url);
 
         createBonds(main);
-        initCamera();
+        initCamera(CzPers);
         if (RepresentacionInicial=='SpheresBonds')
         {
             InitBufSB();
@@ -233,42 +233,23 @@ function Main()
 
     this.Parse=function(txt)
     {
-        /*
-        elementos separados por coma  o un guión
+       
+        var comando=txt.substr(0, txt.indexOf(" ")).toLowerCase();//obtengo la primer palabra que es un comando
 
-        aquí entra el texto para el cuál se realiza el análisis
-        space   =
-        ;       =
-        -       =
-        enter   = 13
-
-        Puedo hacer un array por cada palabra separada por un space ,  ;
-
-
-        obtener la primer palabra que va a ser el comando a usar
-
-        var firstWords = [];
-        for (var i=0;i<codelines.length;i++)
-        {
-          var codeLine = codelines[i];
-          var firstWord = codeLine.substr(0, codeLine.indexOf(" "));
-          firstWords.push(firstWord);
-        }
-
-        */
-        var comando=txt.substr(0, txt.indexOf(" "));//obtengo la primer palabra que es un comando
-        //luego voy a obtener todo lo demás
-        var lines=txt.split(" ");
+        //luego voy a obtener todo lo demás que va a ser la instrucción
+        var lines=txt.split(" ");        
         var inst=txt.replace(comando + ' ','');
 
-        if (comando=='select')
-        {
+        
+        if (comando == 'select') {
+            EliminarSeleccion();
+
             //alert("comando select");
             //obtener todo lo demás antes del ;
             //alert(inst);
             //alert(inst.length);
             var numAtoms=0;
-            var regex = /(\d+)/g;
+            //var regex = /(\d+)/g;
             //alert(inst.match(regex));
             //alert(AtomosSeleccionados.length);
 
@@ -278,7 +259,192 @@ function Main()
             }
             else
             {
-                script=inst.match(regex);
+                //script=inst.match(regex);
+                var arrComa = inst.split(",");
+
+                //alert(arrComa.length);
+                var allselect=false;
+
+                for(var i=0; i<arrComa.length; i++)
+                {
+                    var  ele=arrComa[i];
+
+                    var n=ele.indexOf("-"); 
+                    var m=ele.indexOf(":")
+                    if (n>(-1)) //quiere decir que es un rango ejemplo 34-38
+                    {
+                        //alert("rango");
+                        var arr2=ele.split("-");
+                        var rng1 = arr2[0];
+                        var rng2 = arr2[1];
+                        if (!isNaN(rng1) && !isNaN(rng2)) 
+                        {
+                            //alert("los dos son numeros");
+                            if (rng1>0 && rng1 <= molecule.LstAtoms.length  && rng2>0 && rng2 <= molecule.LstAtoms.length) 
+                            {
+                                if (rng2 < rng1) 
+                                {  
+                                    for(var j=rng2; j<=rng1; j++)
+                                    {
+                                        AtomosSeleccionados.push(molecule.LstAtoms[j - 1]);
+                                    }
+                                }
+                                else
+                                {
+                                    for(var j=rng1; j<=rng2; j++)
+                                    {
+                                        AtomosSeleccionados.push(molecule.LstAtoms[j - 1]);
+                                    }
+                                }
+
+                            }
+                            
+                        }
+
+                    }
+                    else if(m>(-1)) //quiere decir que es un grupo ejemplo 0:45:A
+                    {
+                        alert("grupo");
+                        var arr3=ele.split(":");
+                        if (arr3.length==3) //quiere decir que sì tiene bien las tres partes
+                        {
+                            //0:2:1 
+                            //N:6:2
+                            //Voy a poner todos los casos
+                            if (arr3[0]==0) //todos los àtomos del aminoàciodo 
+                            {
+                                if (arr3[1]==0)  //todos los aminoácidos
+                                {
+                                    if (arr3[2]==0) //todos los átomos de la molécula
+                                    {
+                                        allselect=true;
+                                    }
+                                    else //todos los atomos de una cadena
+                                    {
+                                        //primero checar si es un numero la cadena, entonces sera por index
+                                        alert("una cadena");
+                                        if (!isNaN(arr3[2])) //es un indice
+                                        {
+                                            alert("es numero");
+                                            if (arr3[2]>0 && arr3[2]<=molecule.LstChain.length) //entonces esta en el rango
+                                            {
+                                                var cha=molecule.LstChain[arr3[2]-1];
+                                                for(var j=0; j<cha.LstAminoacid.length;j++)
+                                                {
+                                                    var amin=cha.LstAminoacid[j];
+                                                    for(var z=0; z<amin.LstAtoms.length;z++)
+                                                    {
+                                                        AtomosSeleccionados.push(amin.LstAtoms[z]);
+                                                    }
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                //la cadena no esta dentro del indice
+                                            }
+                                        }
+                                        else //si no la cadena es por nombre
+                                        {
+                                            alert("No es numero");
+                                            //tengo que buscarlo por la letra
+                                            for(var j=0;j<molecule.LstChain.length; j++)
+                                            {
+                                                if (arr3[2]==molecule.LstChain[j].Name.replace(" ", "") )
+                                                {
+                                                    alert("si entra al if")
+                                                    //procesalo y salte del for
+                                                    var cha=molecule.LstChain[j];
+                                                    for(var k=0; k<cha.LstAminoAcid.length;k++)
+                                                    {
+                                                        var amin=cha.LstAminoAcid[k];
+                                                        for(var z=0; z<amin.LstAtoms.length;z++)
+                                                        {
+                                                            AtomosSeleccionados.push(amin.LstAtoms[z]);
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    //todos los àtomos de un aminoàcido, puede ser de varias cadenas
+                                    if (arr3[2]==0) 
+                                    {
+                                        //todos los atomos de un aminoacido de todas las cadenas
+                                        //el aminoacido puede ser 
+
+                                    }
+                                    else //todos los atomos de una cadena
+                                    {
+
+                                    }
+
+
+                                }
+                            }
+                            else
+                            {
+                                //buscar el elemento
+                                if (arr3[1]==0)  //en todos los aminoácidos
+                                {
+                                    if (arr3[2]==0) //en todas las cadenas
+                                    {
+                                        for (var j = 0; j < molecule.LstAtoms.length; j++) 
+                                        {
+                                            if (arr3[0] == molecule.LstAtoms[j].Element) {
+                                                if (molecule.LstAtoms[j].State == 'Active') {
+                                                    AtomosSeleccionados.push(molecule.LstAtoms[j]);
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                    else //todos los aminoacidos de una cadena
+                                    {
+
+
+
+                                    }
+
+                                }
+                                else //en un aminoacido
+                                {
+                                    if (arr3[2]==0) //en todas las cadenas
+                                    {
+                                        
+
+                                    }
+                                    else //solo en una cadena
+                                    {
+
+
+
+                                    }
+
+
+                                }
+
+                                
+                            }
+
+                        }
+
+                    }
+                    else //quiere decir que es un index ejemplo 45
+                    {
+                        AtomosSeleccionados.push(molecule.LstAtoms[ele-1]);
+                    }
+
+                }
+
+                /*
                 for(var o in script)
                 {
                     if(o==0)
@@ -289,6 +455,11 @@ function Main()
                     {
                          AtomosSeleccionados=AtomosSeleccionados.concat(molecule.LstChain[0].LstAminoAcid[script[o]-1].GetAtoms());
                     }
+                }
+                */
+                if (allselect==true) 
+                {
+                    AtomosSeleccionados=molecule.LstAtoms;
                 }
                 ProcesarSeleccion();
             }
@@ -315,7 +486,8 @@ function Main()
         }
         else if (comando=='show')
         {
-            if (inst=='sequence') //para el show sequence
+            instLower=inst.toLowerCase();
+            if (instLower=='sequence') //para el show sequence
             {
                 var sqnc='';
                 for(var o in molecule.LstChain) //son los objetos seleccionados  main.oRepresentation.molecule
@@ -338,25 +510,21 @@ function Main()
                 }
                 document.getElementById("Console_output").value=sqnc;
             }
-            else if(inst=='cpk') //para mostrar el cpk
+            else if(instLower=='cpk') //para mostrar el cpk
             {
-                main.oRepresentation.repre='CPK';
-                main.oRepresentation.Make(main.o3D);
+                CambiarRepresentacion('CPK');
             }
-            else if(inst=='sb') //para mostrar el cpk
+            else if(instLower=='spherebond') //para mostrar en spheres bonds
             {
-                main.oRepresentation.repre='SB';
-                main.oRepresentation.Make(main.o3D);
+                CambiarRepresentacion('SB');
             }
-            else if(inst=='bonds') //para mostrar el cpk
+            else if(instLower=='bond') //para mostrar el cpk
             {
-                main.oRepresentation.repre='Bonds';
-                main.oRepresentation.Make(main.o3D);
+                CambiarRepresentacion('Bonds');
             }
-            else if(inst=='skeleton') //para mostrar el cpk
+            else if(instLower=='backbone') //para mostrar el cpk
             {
-                main.oRepresentation.repre='Skeleton';
-                main.oRepresentation.Make(main.o3D);
+                CambiarRepresentacion('Skeleton');
             }
             else
             {
@@ -378,7 +546,7 @@ function Main()
         // If the user has pressed enter
         if (key == 13) {
             event.preventDefault(); //esta línea es para que no se imprima una nueva línea con el enter
-            main.Parse(document.getElementById("Console_input").value.toLowerCase());
+            main.Parse(document.getElementById("Console_input").value);
             document.getElementById("Console_input").value='';
             //document.getElementById("Console_input").value =document.getElementById("Console_input").value + "\n*";
             return false;

@@ -486,7 +486,8 @@ function Main()
         }
         else if (comando=='show')
         {
-            if (inst=='sequence') //para el show sequence
+            instLower=inst.toLowerCase();
+            if (instLower=='sequence') //para el show sequence
             {
                 var sqnc='';
                 for(var o in molecule.LstChain) //son los objetos seleccionados  main.oRepresentation.molecule
@@ -509,25 +510,21 @@ function Main()
                 }
                 document.getElementById("Console_output").value=sqnc;
             }
-            else if(inst=='cpk') //para mostrar el cpk
+            else if(instLower=='cpk') //para mostrar el cpk
             {
-                main.oRepresentation.repre='CPK';
-                main.oRepresentation.Make(main.o3D);
+                CambiarRepresentacion('CPK');
             }
-            else if(inst=='sb') //para mostrar el cpk
+            else if(instLower=='spherebond') //para mostrar en spheres bonds
             {
-                main.oRepresentation.repre='SB';
-                main.oRepresentation.Make(main.o3D);
+                CambiarRepresentacion('SB');
             }
-            else if(inst=='bonds') //para mostrar el cpk
+            else if(instLower=='bond') //para mostrar el cpk
             {
-                main.oRepresentation.repre='Bonds';
-                main.oRepresentation.Make(main.o3D);
+                CambiarRepresentacion('Bonds');
             }
-            else if(inst=='skeleton') //para mostrar el cpk
+            else if(instLower=='backbone') //para mostrar el cpk
             {
-                main.oRepresentation.repre='Skeleton';
-                main.oRepresentation.Make(main.o3D);
+                CambiarRepresentacion('Skeleton');
             }
             else
             {
@@ -542,14 +539,14 @@ function Main()
         }
 
     }
-    
+
     this.onTestChange=function(event)
     {
         var key =  event.which || event.keyCode; //se ponen los dos porque en firefox no sirve keycode
         // If the user has pressed enter
         if (key == 13) {
             event.preventDefault(); //esta línea es para que no se imprima una nueva línea con el enter
-            main.Parse(document.getElementById("Console_input").value.toLowerCase());
+            main.Parse(document.getElementById("Console_input").value);
             document.getElementById("Console_input").value='';
             //document.getElementById("Console_input").value =document.getElementById("Console_input").value + "\n*";
             return false;

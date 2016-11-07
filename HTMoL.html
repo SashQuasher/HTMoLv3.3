@@ -386,7 +386,7 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
 
         mat4.identity(mvMatrix);
 
-        mat4.translate(mvMatrix, [x, y, -CameraPosition]);
+        mat4.translate(mvMatrix, [x, y, CameraPosition]);
 
         mat4.multiply(mvMatrix, RotationMatrix);
         //mat4.multiplyVec4(mvMatrix, vec, vecResul);  //matriz por vector = vector
@@ -403,10 +403,6 @@ Copyright (C) 2014  Alvarez Rivera Leonardo,Becerra Toledo Francisco Javier, Veg
             var x1=0;
             var y1=0;
             var z1=0;
-            console.log("empieza play");
-            console.log("coordsX:"+coordsX.length);
-            console.log("pos:"+pos);
-            console.log("frame:"+numframe);
             var apuntador=0;
             var NoAtomos = molecule.LstAtoms.length;
             var Restantes = NoAtomos - ((NoBloques-1) * NoPaso);

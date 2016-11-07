@@ -59,7 +59,7 @@ function Main()
     //--------------------------
     molecule=this.ObjP.ReadFile(pdbInicial);
     createBonds(this);
-    initCamera();
+    initCamera(CzPers);
 
     //---------------------------
 
@@ -194,7 +194,7 @@ function Main()
         molecule=main.ObjP.ReadFile(url);
 
         createBonds(main);
-        initCamera();
+        initCamera(CzPers);
         if (RepresentacionInicial=='SpheresBonds')
         {
             InitBufSB();
